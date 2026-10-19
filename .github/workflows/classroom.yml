@@ -1,0 +1,93 @@
+name: Autograding Tests
+
+on:
+  push:
+  workflow_dispatch:
+  repository_dispatch:
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pytest
+        run: pip install pytest
+
+      - name: Corn x7
+        id: corn
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Corn x7
+          command: pytest test_for_loop_investigate.py::test_corn
+          timeout: 10
+          max-score: 1
+
+      - name: Numbers 1 to 20
+        id: one-to-twenty
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Numbers 1 to 20
+          command: pytest test_for_loop_investigate.py::test_1_to_20
+          timeout: 10
+          max-score: 1
+
+      - name: Odd numbers 1 to 100
+        id: odds
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Odd numbers 1 to 100
+          command: pytest test_for_loop_investigate.py::test_odds
+          timeout: 10
+          max-score: 1
+
+      - name: 20 down to 1
+        id: countdown
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: 20 down to 1
+          command: pytest test_for_loop_investigate.py::test_20_down_to_1
+          timeout: 10
+          max-score: 1
+
+      - name: Cubes 1 to 10
+        id: cubes
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Cubes 1 to 10
+          command: pytest test_for_loop_investigate.py::test_cubes
+          timeout: 10
+          max-score: 1
+
+      - name: Every 10th number
+        id: every-10th
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Every 10th number
+          command: pytest test_for_loop_investigate.py::test_every_10th
+          timeout: 10
+          max-score: 1
+
+      - name: Autograding Reporter
+        uses: classroom-resources/autograding-grading-reporter@v1
+        env:
+          CORN_RESULTS: "${{steps.corn.outputs.result}}"
+          ONE-TO-TWENTY_RESULTS: "${{steps.one-to-twenty.outputs.result}}"
+          ODDS_RESULTS: "${{steps.odds.outputs.result}}"
+          COUNTDOWN_RESULTS: "${{steps.countdown.outputs.result}}"
+          CUBES_RESULTS: "${{steps.cubes.outputs.result}}"
+          EVERY-10TH_RESULTS: "${{steps.every-10th.outputs.result}}"
+        with:
+          runners: corn,one-to-twenty,odds,countdown,cubes,every-10th

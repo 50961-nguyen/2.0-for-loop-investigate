@@ -7,7 +7,7 @@ Run the code first, see what the output is. Does it make sense? If you don't und
 
 Modify each loop according to the given #TODO.
 
-## Code
+```python
 """
 author:
 date:
@@ -55,3 +55,4 @@ print(separator)
 # TODO: Print every 10th number from 0 to 100
 for i in range(0, 51, 5):
     print(i)
+```
